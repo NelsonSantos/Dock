@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dock.Model.Controls;
 
 namespace Dock.Model.Core;
@@ -306,7 +307,7 @@ public partial interface IFactory
     /// Removes dockable from owner <see cref="IDock.VisibleDockables"/> collection, and call IDockable.OnClose.
     /// </summary>
     /// <param name="dockable">The dockable to remove.</param>
-    void CloseDockable(IDockable dockable);
+    Task CloseDockable(IDockable dockable);
         
     /// <summary>
     /// Calls <see cref="IFactory.CloseDockable"/> on all <see cref="IDock.VisibleDockables"/> of the dockable owner, excluding the dockable itself.

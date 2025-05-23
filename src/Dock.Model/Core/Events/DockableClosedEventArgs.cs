@@ -21,3 +21,22 @@ public class DockableClosedEventArgs : EventArgs
         Dockable = dockable;
     }
 }
+
+/// <summary>
+/// 
+/// </summary>
+public class DockableWillBeClosedEventArgs : EventArgs
+{
+    public IDockable? Dockable { get; }
+
+    public bool Cancel { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dockable"></param>
+    public DockableWillBeClosedEventArgs(IDockable? dockable)
+    {
+        Dockable = dockable;
+    }
+}

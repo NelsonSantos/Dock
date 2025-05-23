@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Dock.Model.Core.Events;
 
 namespace Dock.Model.Core;
@@ -33,6 +34,12 @@ public partial interface IFactory
     /// </summary>
     event EventHandler<DockableRemovedEventArgs>? DockableRemoved;
 
+    /// <summary>
+    /// Dockable will be closed event handler. 
+    /// </summary>
+    //event EventHandler<DockableWillBeClosedEventArgs>? DockableWillBeClosed;
+    event Func<DockableWillBeClosedEventArgs, Task<bool>>? DockableWillBeClosed;
+    
     /// <summary>
     /// Dockable closed event handler.
     /// </summary>
@@ -128,6 +135,13 @@ public partial interface IFactory
     /// <param name="dockable">The removed dockable.</param>
     void OnDockableRemoved(IDockable? dockable);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dockable"></param>
+    /// <returns></returns>
+    Task<bool> OnDockableWillBeClosed(IDockable? dockable);
+    
     /// <summary>
     /// Called when the dockable has been closed.
     /// </summary>

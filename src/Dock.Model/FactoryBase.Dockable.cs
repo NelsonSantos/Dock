@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Dock.Model.Controls;
 using Dock.Model.Core;
 
@@ -603,10 +604,13 @@ public abstract partial class FactoryBase
     }
 
     /// <inheritdoc/>
-    public virtual void CloseDockable(IDockable dockable)
+    public virtual async Task CloseDockable(IDockable dockable)
     {
-        if (dockable.CanClose && dockable.OnClose())
+        if (dockable.CanClose)
         {
+            if (!await OnDockableWillBeClosed(dockable))
+                return;
+
             RemoveDockable(dockable, true);
             OnDockableClosed(dockable);
         }

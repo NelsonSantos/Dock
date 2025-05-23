@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Dock.Model.Core;
 using Dock.Model.Core.Events;
 
@@ -27,6 +28,10 @@ public abstract partial class FactoryBase
     /// <inheritdoc />
     public event EventHandler<DockableClosedEventArgs>? DockableClosed;
 
+    /// <inheritdoc />
+    //public event EventHandler<DockableWillBeClosedEventArgs>? DockableWillBeClosed;
+    public event Func<DockableWillBeClosedEventArgs, Task<bool>>? DockableWillBeClosed;
+    
     /// <inheritdoc />
     public event EventHandler<DockableMovedEventArgs>? DockableMoved;
 
@@ -85,6 +90,23 @@ public abstract partial class FactoryBase
     public virtual void OnDockableRemoved(IDockable? dockable)
     {
         DockableRemoved?.Invoke(this, new DockableRemovedEventArgs(dockable));
+    }
+
+    /// <inheritdoc />
+    public virtual async Task<bool> OnDockableWillBeClosed(IDockable? dockable)
+    {
+        var canClose = dockable?.OnClose() ?? true;
+
+        if (canClose)
+            return true;
+        
+        var eventArgs = new DockableWillBeClosedEventArgs(dockable)
+        {
+            Cancel = !canClose
+        };
+        
+        return await DockableWillBeClosed?.Invoke(eventArgs);
+
     }
 
     /// <inheritdoc />
